@@ -1,0 +1,25 @@
+{
+  "name": "hapi_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marb61a/hapi_api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marb61a/hapi_api/issues"
+  },
+  "dependencies": {
+    "good": "^7.0.1",
+    "good-console": "^6.1.2",
+    "good-squeeze": "^3.0.1",
+    "hapi": "^13.4.1"
+  },
+  "homepage": "https://github.com/marb61a/hapi_api#readme"
+}
