@@ -16,10 +16,14 @@
     "url": "https://github.com/marb61a/hapi_api/issues"
   },
   "dependencies": {
+    "bcrypt": "^0.8.7",
     "good": "^7.0.1",
     "good-console": "^6.1.2",
     "good-squeeze": "^3.0.1",
-    "hapi": "^13.4.1"
+    "hapi": "^13.4.1","hapi-auth-bearer-token": "^4.1.1",
+    "joi": "^8.4.2",
+    "mongojs": "^2.4.0",
+    "node-uuid": "^1.4.7"
   },
   "homepage": "https://github.com/marb61a/hapi_api#readme"
 }
