@@ -11,7 +11,29 @@ exports.register = function(server, options, next){
         method: 'POST',
         path: '/login',
         handler : function(request, reply){
-            
+            db.users.findOne({
+                username : request.payload.username
+            }, (err, user) => {
+                if (err) {
+                    throw err;
+                }
+                if (!user) {
+                    return reply(Boom.unauthorized());
+                }
+                
+                Bcrypt.compare(request.payload.password, user.password, (err, res) => {
+                    if (err) {
+                        throw err;
+                    }
+                    if (!res) {
+                        return reply(Boom.unauthorized());
+                    }
+                    return reply({
+                        token: user.token,
+                        username: user.username
+                    });
+                });
+            });    
         }
     });
     
