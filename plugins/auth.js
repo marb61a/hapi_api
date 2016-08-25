@@ -1,24 +1,31 @@
 'use strict';
 
-const Boom = require('boom');
-const Bcrypt = require('bcrypt');
-const Joi = require('joi');
-
-exports.register = function(server, options, next){
+exports.register = function (server, options, next){
     const db = server.app.db;
     
-    server.route({
-        method: 'POST',
-        path: '/login',
-        handler : function(request, reply){
+    const validateFunction = (token, callback) => {
+        db.users.findOne({
+            token : token
+        }, (err, user) => {
+            if(err){
+                return callback(err, false);
+            } 
+            if(!user){
+                return callback(null, false);    
+            }
             
-        }
+            return callback(null, true, user);
+        });    
+    };
+    
+    server.auth.strategy('bearer', 'bearer-access-token', {
+        validateFunc: validateFunction
     });
     
     return next();
 };
 
 exports.register.attributes = {
-    name: 'routes-auth',
-    dependencies: ['db']
+    name: 'auth',
+    dependencies: ['db', 'hapi-auth-bearer-token']
 };
