@@ -21,6 +21,20 @@ exports.register = function(server, options, next){
         password: Bcrypt.hashSync('doe', Bcrypt.genSaltSync()),
         token: '11e6b67b9e71128cae77'    
     }];
+    
+    db.users.remove({}, (err) => {
+        if(err){
+            return next(err);
+        }
+        
+        db.users.insert({}, () => {
+            if(err){
+                return next(err);
+            }    
+            
+            return next();
+        });
+    });
 };
 
 exports.register.attributes = {

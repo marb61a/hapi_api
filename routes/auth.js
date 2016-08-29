@@ -34,6 +34,15 @@ exports.register = function(server, options, next){
                     });
                 });
             });    
+        },
+        
+        config : {
+            validate : {
+                payload : {
+                    username: Joi.string().min(1).max(50).required(),
+                    password: Joi.string().min(1).max(50).required()
+                }
+            }
         }
     });
     
