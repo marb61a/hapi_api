@@ -63,4 +63,26 @@ exports.register = function (server, options, next){
         }
     });
     
+    server.route({
+        method : 'GET',
+        path : '/bookmarks/{id}',
+        handler : function(request, reply){
+            db.bookmarks.findOne({
+                _id : request.params.id
+            }, (err, doc) => {
+                if(err){
+                    throw err;
+                }
+                
+                if(!doc){
+                    return reply(Boom.notFound());
+                }
+                doc.upvotes = doc.upvoters.length;
+                _renameAndClearFields(doc);
+
+                return reply(doc);
+            });
+        }
+    });
+    
 };
