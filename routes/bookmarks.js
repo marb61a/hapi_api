@@ -85,4 +85,34 @@ exports.register = function (server, options, next){
         }
     });
     
+    server.route({
+        method : 'POST',
+        path : '/bookmarks',
+        handler : function(request, reply){
+            const bookmark = request.payload;
+            bookmark._id = uuid.v1();
+            bookmark.created = new Date();
+            bookmark.creator = request.auth.credentials._id;
+            bookmark.upvoters = [];
+            bookmark.upvotes = 0;
+            
+            db.bookmarks.save(bookmark, (err, result) => {
+                if(err){
+                    throw err;
+                }
+                
+                _renameAndClearFields(bookmark);
+                return reply(bookmark).code(201);
+            });
+        },
+        config : {
+            auth : 'bearer',
+            validate : {
+                payload : {
+                    title: Joi.string().min(1).max(100).required(),
+                    url: Joi.string().uri().required()
+                }
+            }
+        }
+    });
 };
