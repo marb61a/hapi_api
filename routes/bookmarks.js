@@ -115,4 +115,34 @@ exports.register = function (server, options, next){
             }
         }
     });
+    
+    server.route({
+        method : 'PATCH',
+        path : '/bookmarks/{id}',
+        handler : function(request, reply){
+            db.bookmarks.update({
+                _id : request.params.id
+            }, {
+                $set: request.payload
+            }, (err, result) => {
+                if(err){
+                    throw err;
+                }
+                
+                if (result.n === 0){
+                    return reply(Boom.notFound());
+                }
+                
+                return reply().code(204);
+            });    
+        },
+        config : {
+            validate : {
+                payload : Joi.object({
+                    title: Joi.string().min(1).max(100).optional(),
+                    url: Joi.string().uri().optional()    
+                }).required().min(1)
+            }
+        }
+    });
 };
