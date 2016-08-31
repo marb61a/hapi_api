@@ -168,4 +168,38 @@ exports.register = function (server, options, next){
             auth : 'bearer'
         }
     });
+    
+    server.route({
+        method : 'POST',
+        path : '/bookmarks/{id}/upvote',
+        function(request, reply){
+            db.bookmarks.update({
+                _id: request.params.id
+            }, {
+                $addToSet : {
+                    upvoters: request.auth.credentials._id
+                }
+            }, (err, result) => {
+                if(err){
+                    throw err
+                } 
+                
+                if (result.n === 0) {
+                    return reply(Boom.notFound());
+                }
+
+                return reply().code(204);
+            });    
+        },
+        config : {
+            auth : 'bearer'
+        }
+    });
+    
+    return next();
+};
+
+exports.register.attributes = {
+    name: 'routes-bookmarks',
+    dependencies: ['db']
 };
