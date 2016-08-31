@@ -145,4 +145,27 @@ exports.register = function (server, options, next){
             }
         }
     });
+    
+    server.route({
+        method : 'DELETE',
+        path : '/bookmarks/{id}',
+        handler : function(request, reply){
+            db.bookmarks.remove({
+                _id: request.params.id
+            }, (err, result) => {
+                if(err){
+                    throw err;
+                }
+                
+                if (result.n === 0) {
+                    return reply(Boom.notFound());
+                }
+
+                return reply().code(204);
+            });
+        },
+        config : {
+            auth : 'bearer'
+        }
+    });
 };
